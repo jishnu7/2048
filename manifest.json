@@ -12,7 +12,8 @@
   },
   "appID": "2a2a13abfe6a469189951d0031514f4b",
   "dependencies": {
-    "devkit-core": "https://github.com/hashcube/devkit-core.git#v4.5.3-1"
+    "devkit-core": "https://github.com/hashcube/devkit-core.git#v4.5.3-1",
+    "fbinstant": "git@github.com:hashcube/fbinstant.git#master"
   },
   "description": "",
   "icon": "resources/icons/icon512.png",
