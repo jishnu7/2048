@@ -3,7 +3,6 @@ import ui.View as View;
 import src.gc.ButtonView as ButtonView;
 import util.underscore as _;
 
-import src.PlayGame as PlayGame;
 import src.Storage as Storage;
 import src.Utils as Utils;
 /* jshint ignore:end */
@@ -131,27 +130,6 @@ exports = Class(View, function(supr) {
   };
 
   this.update = function() {
-    var opts;
-
-    if(PlayGame.isLoggedIn()) {
-      opts = {
-        images: Utils.getButtonImage('signout', true),
-        on: {
-          up: bind(this, PlayGame.logout, this.update)
-        }
-      };
-    } else {
-      opts = {
-        images: Utils.getButtonImage('signin'),
-        on: {
-          up: bind(this, PlayGame.login, this.update)
-        }
-      };
-    }
-    this.playButton.updateOpts(opts);
-    this.playButton.setState(ButtonView.states.UP);
-
-    this.needsReflow();
   };
 
   this.refresh = function () {

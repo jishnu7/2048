@@ -4,7 +4,6 @@ import ui.TextView as TextView;
 
 import src.Storage as Storage;
 import src.Utils as Utils;
-import src.PlayGame as PlayGame;
 /* jshint ignore:end */
 
 exports = Class(TextView, function(supr) {
@@ -58,15 +57,6 @@ exports = Class(TextView, function(supr) {
   };
 
   this.show = function() {
-    if(head >= strings.length ||
-        // if user is connected to google, don't show G+ message
-        (head === strings.length - 1 && PlayGame.isLoggedIn())) {
-      this.updateOpts({
-        visible: false
-      });
-      return;
-    }
-
     var anim = animate(this);
     anim.now(function() {
       this.updateOpts({
