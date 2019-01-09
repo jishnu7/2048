@@ -55,8 +55,7 @@ exports = Class(View, function(supr) {
         height: 30,
         text: name,
         size: 30 * scale,
-        color: Utils.theme.text,
-        fontFamily: Utils.fonts.text
+        color: Utils.theme.text
       }),
       number = new ScoreView({
         superview: container,

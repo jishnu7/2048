@@ -25,8 +25,7 @@ exports = Class(TextView, function(supr) {
       wrap: true,
       padding: '100 100',
       offsetY: 75,
-      color: Utils.theme.text,
-      fontFamily: Utils.fonts.number
+      color: Utils.theme.text
     });
     supr(this, 'init', [opts]);
   };
