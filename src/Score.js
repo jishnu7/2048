@@ -4,6 +4,7 @@ import ui.View as View;
 import ui.TextView as TextView;
 import ui.ScoreView as ScoreView;
 import util.underscore as _;
+import fbinstant as fbinstant;
 
 import src.Utils as Utils;
 /* jshint ignore:end */
@@ -140,6 +141,9 @@ exports = Class(View, function(supr) {
     score = score || getHighScore(this.mode);
     this.highScore = score;
     this.highScoreView.setText(this.mode, score);
+    fbinstant.setDataAsync({
+      high_score: this.highScore
+    });
   };
 
   this.saveHighScore = function() {

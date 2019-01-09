@@ -52,42 +52,6 @@ exports = (function() {
     text: 'Raleway-ExtraLight'
   };
 
-  obj.humanTime = function(seconds) {
-    var out = '', h, m;
-    h = Math.floor(seconds/3600);
-    if(h>0) {
-      out += h + 'h ';
-    }
-    seconds %= 3600;
-    m = Math.floor(seconds/60);
-    out += m + 'm ';
-    seconds %= 60;
-    out += Math.floor(seconds) + 's' ;
-    return out;
-  };
-
-  obj.getButtonImage = function(name, theme, select) {
-    var path = '',
-      images;
-
-    if(theme) {
-      path = Storage.getTheme() + '/';
-    }
-
-    if(select) {
-      images = {
-        selected: new Image({url: 'resources/images/' + path + 'btn_' + name + 'on.png'}),
-        unselected: new Image({url: 'resources/images/btn_' + name + 'off.png'})
-      };
-    } else {
-      images = {
-        up: new Image({url: 'resources/images/' + path + 'btn_' + name + '.png'}),
-        down: new Image({url: 'resources/images/btn_' + name + '_down.png'})
-      };
-    }
-    return images;
-  };
-
   obj.getImage = function(name, theme) {
     if(theme) {
       name = Storage.getTheme() + '/' + name;
