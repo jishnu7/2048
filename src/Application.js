@@ -31,10 +31,10 @@ exports = Class(GC.Application, function () {
       path: 'resources/audio/',
       files: {
         merge: {
-          volume: 10
+          volume: 1
         },
         swipe: {
-          volume: 100
+          volume: 1
         }
       }
     });
