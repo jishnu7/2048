@@ -1,5 +1,5 @@
 /* jshint ignore:start */
-import src.modules.facebook_event as facebook_event;
+import src.Modules.facebook_event as facebook_event;
 import fbinstant as fbinstant;
 /* jshint ignore:end */
 

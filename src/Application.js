@@ -14,7 +14,7 @@ import src.Grid as Grid;
 import src.Score as Score;
 import src.Menu as Menu;
 import src.Tutorial as Tutorial;
-import src.modules.facebook_event as facebook_event;
+import src.Modules.facebook_event as facebook_event;
 import fbinstant as fbinstant;
 /* jshint ignore:end */
 
