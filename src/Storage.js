@@ -1,3 +1,7 @@
+/* jshint ignore:start */
+import src.modules.facebook_event as facebook_event;
+import fbinstant as fbinstant;
+/* jshint ignore:end */
 
 exports = (function() {
   var prevGameID = 'prev_game',
@@ -56,9 +60,22 @@ exports = (function() {
       if(tile < 8) {
         return;
       }
-      var data = this.getTileStats(tile);
+      var data = this.getTileStats(tile),
+        highest_merge;
       if(!data[tile]) {
         data[tile] = 1;
+        fbinstant.getDataAsync(['highest_merge'])
+        .then(function (data) {
+          highest_merge = data['highest_merge'];
+          if (!highest_merge || highest_merge < tile) {
+            fbinstant.setDataAsync({
+              highest_merge: tile
+            });
+            facebook_event.logHighestMerge({
+              value: tile
+            });
+          }
+        });
       } else {
         ++data[tile];
       }
@@ -71,13 +88,20 @@ exports = (function() {
 
     saveGameStats: function(game) {
       var data = this.getGameStats(),
-        score = game.score;
+        score = game.score.score,
+        highestTile = game.score.highestTile;
       data.push({
         mode: game.mode,
-        score: score.score,
+        score: score,
         time: score.timer,
-        highestTile: score.highestTile,
+        highestTile: highestTile,
       });
+
+      facebook_event.gameOver({
+        highest_merge: highestTile,
+        score: score
+      });
+
       saveData(statsGame, data);
     },
 

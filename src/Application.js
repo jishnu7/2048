@@ -14,6 +14,8 @@ import src.Grid as Grid;
 import src.Score as Score;
 import src.Menu as Menu;
 import src.Tutorial as Tutorial;
+import src.modules.facebook_event as facebook_event;
+import fbinstant as fbinstant;
 /* jshint ignore:end */
 
 exports = Class(GC.Application, function () {
@@ -120,6 +122,12 @@ exports = Class(GC.Application, function () {
       this.push(game);
     }));
 
+    game.on('ViewDidAppear', bind(this, function () {
+      facebook_event.screenLoaded({
+        screen: 'game_screen'
+      });
+    }));
+
     var newGame = bind(this, function(mode) {
       grid.setMode(mode);
       Storage.deleteGame();
@@ -128,6 +136,19 @@ exports = Class(GC.Application, function () {
       var evnt = {};
       evnt[mode] = true;
     });
+
+    fbinstant.getDataAsync(['played_before'])
+        .then(function (data) {
+          if (!data['played_before']) {
+            facebook_event.firstLaunch({
+              app_version: CONFIG.version
+            });
+            fbinstant.setDataAsync({
+              played_before: true
+            });
+          }
+        });
+
     newGame('classic');
   };
 

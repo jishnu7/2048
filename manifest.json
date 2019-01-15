@@ -40,5 +40,10 @@
     "resources/fonts/Raleway-ExtraLight.ttf",
     "resources/fonts/Signika-Regular.ttf"
   ],
-  "version": "2.0"
+  "version": "0.0.1",
+  "browser": {
+    "canvas": {
+      "useWebGL": true
+    }
+  }
 }
