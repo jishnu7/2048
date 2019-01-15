@@ -6,6 +6,6 @@
       }
     },
     "orientation": "PORTRAIT",
-    "navigation_menu_version": "NAV_BAR"
+    "navigation_menu_version": "NAV_FLOATING"
   }
 }
