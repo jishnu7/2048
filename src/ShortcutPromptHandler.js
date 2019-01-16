@@ -9,7 +9,9 @@ exports = (function() {
     fbinstant.getDataAsync(['shortcut_created'])
       .then(function (data) {
         if (!data['shortcut_created']) {
-          return fbinstant.canCreateShortcutAsync();
+          return fbinstant.canCreateShortcutAsync;
+        } else {
+          return Promise.reject();
         }
       })
       .then(function () {
