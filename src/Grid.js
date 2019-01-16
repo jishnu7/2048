@@ -12,6 +12,7 @@ import util.underscore as _;
 import src.Cell as Cell;
 import src.Utils as Utils;
 import src.Storage as Storage;
+import src.ShortcutPromptHandler as ShortcutPromptHandler;
 /* jshint ignore:end */
 
 exports = Class(GridView, function(supr) {
@@ -22,6 +23,8 @@ exports = Class(GridView, function(supr) {
       margin = 10,
       baseSize = opts.baseWidth - 100,
       cellSize = Math.round((baseSize-margin*2)/size) - margin*2;
+
+    ShortcutPromptHandler.min_cond = 256;
 
     this._refresh = [];
 
@@ -257,6 +260,8 @@ exports = Class(GridView, function(supr) {
     this.removeCell(cell2);
     this.score.update(newVal);
     this.emit('updateScore', newVal);
+
+    ShortcutPromptHandler.min_cond == newVal && ShortcutPromptHandler.prompt();
   };
 
   this.moveCells = function(direction, cb) {
