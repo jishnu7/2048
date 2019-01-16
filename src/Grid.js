@@ -13,6 +13,7 @@ import src.Cell as Cell;
 import src.Utils as Utils;
 import src.Storage as Storage;
 import src.ShortcutPromptHandler as ShortcutPromptHandler;
+import src.Modules.facebook_event as facebook_event;
 /* jshint ignore:end */
 
 exports = Class(GridView, function(supr) {
@@ -269,6 +270,7 @@ exports = Class(GridView, function(supr) {
       vector = Utils.getVector(direction),
       traversals = this.buildTraversals(vector),
       moveMade = false,
+      swipe_count = GC.app.valid_swipe_count;
       finish = Utils.finish(traversals.row.length * traversals.col.length, bind(this, function() {
         if(this.mode === 'time') {
           moveMade = false;
@@ -303,6 +305,9 @@ exports = Class(GridView, function(supr) {
         }
       }));
     }));
+
+    moveMade && GC.app.first_launch && swipe_count < 5 &&
+      facebook_event.logEvent('swipe_' + ++swipe_count);
   };
 
   this.moveCell = function(cell, farthest, cb) {
