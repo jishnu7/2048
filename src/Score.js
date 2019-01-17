@@ -130,6 +130,7 @@ exports = Class(View, function(supr) {
 
   this.setScore = function(score) {
     this.score = score;
+    GC.app.updateLeaderBoard();
     this.scoreView.setText(this.mode, score);
     if(score > this.highScore) {
       this.setHighScore(score);

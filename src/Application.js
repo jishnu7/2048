@@ -80,6 +80,21 @@ exports = Class(GC.Application, function () {
       tutorial.start();
     };
 
+    this.updateLeaderBoard = function () {
+      var context = fbinstant.FBInstant.context.getID();
+
+      fbinstant.getLeaderboardAsync("leaderboard_context." + context)
+        .then(function (leaderboard) {
+          return leaderboard.setScoreAsync(score.score);
+        })
+        .then(function () {
+          return FBInstant.updateAsync({
+            action: 'LEADERBOARD',
+            name: 'leaderboard_context.' + context
+          });
+        });
+    };
+
     grid.on('updateScore', function() {
       audio.play('merge');
     });
