@@ -17,7 +17,8 @@ import src.Modules.facebook_event as facebook_event;
 /* jshint ignore:end */
 
 exports = Class(GridView, function(supr) {
-  var StartCells = 2;
+  var StartCells = 2,
+    swipe_count;
 
   this.init = function(opts) {
     var size = 4,
@@ -97,6 +98,7 @@ exports = Class(GridView, function(supr) {
     });
 
     this.score = opts.score;
+    swipe_count = 0;
   };
 
   // Function to load saved game from local storage.
@@ -270,7 +272,6 @@ exports = Class(GridView, function(supr) {
       vector = Utils.getVector(direction),
       traversals = this.buildTraversals(vector),
       moveMade = false,
-      swipe_count = GC.app.valid_swipe_count;
       finish = Utils.finish(traversals.row.length * traversals.col.length, bind(this, function() {
         if(this.mode === 'time') {
           moveMade = false;
@@ -306,8 +307,10 @@ exports = Class(GridView, function(supr) {
       }));
     }));
 
-    moveMade && GC.app.first_launch && swipe_count < 5 &&
-      facebook_event.logEvent('swipe_' + ++swipe_count);
+    if (moveMade && GC.app.first_launch && swipe_count < 5) {
+      swipe_count = swipe_count + 1;
+      facebook_event.logEvent('swipe_' + swipe_count);
+    }
   };
 
   this.moveCell = function(cell, farthest, cb) {

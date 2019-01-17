@@ -162,7 +162,6 @@ exports = Class(GC.Application, function () {
               played_before: true
             });
             GC.app.first_launch = true;
-            GC.app.valid_swipe_count = 0;
           }
         });
 
