@@ -6,6 +6,9 @@
       }
     },
     "orientation": "PORTRAIT",
-    "navigation_menu_version": "NAV_FLOATING"
+    "navigation_menu_version": "NAV_FLOATING",
+    "bot": {
+      "subscription_type": "OPT_IN_PUBLIC"
+    }
   }
 }

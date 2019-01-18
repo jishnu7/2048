@@ -22,6 +22,21 @@ exports = Class(GC.Application, function () {
   this.initUI = function () {
     var size = this.scaleUI();
 
+    fbinstant.getDataAsync(['bot_subscribed'])
+      .then(function (data) {
+        return data['bot_subscribed'] ? Promise.reject() :
+          fbinstant.canSubscribeBotAsync();
+      })
+      .then(function (can_subscribe) {
+        return can_subscribe ? fbinstant.subscribeBotAsync() :
+          Promise.reject();
+      })
+      .then(function () {
+        return fbinstant.setDataAsync({
+          bot_subscribed: true
+        })
+      });
+
     this.view.updateOpts({
       width: size.width,
       height: size.height

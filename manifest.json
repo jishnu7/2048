@@ -11,6 +11,11 @@
     }
   },
   "appID": "2a2a13abfe6a469189951d0031514f4b",
+  "browser": {
+    "canvas": {
+      "useWebGL": true
+    }
+  },
   "dependencies": {
     "devkit-core": "https://github.com/hashcube/devkit-core.git#hc-fbinstant",
     "fbinstant": "git@github.com:hashcube/fbinstant.git#master"
@@ -40,10 +45,5 @@
     "resources/fonts/Raleway-ExtraLight.ttf",
     "resources/fonts/Signika-Regular.ttf"
   ],
-  "version": "0.0.1",
-  "browser": {
-    "canvas": {
-      "useWebGL": true
-    }
-  }
+  "version": "0.0.2"
 }
