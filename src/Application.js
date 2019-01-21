@@ -5,6 +5,7 @@ import ui.GestureView as GestureView;
 import AudioManager;
 import event.Callback as Callback;
 import util.underscore as _;
+import ui.resource.loader as loader;
 
 import src.Utils as Utils;
 import src.History as History;
@@ -19,6 +20,12 @@ import fbinstant as fbinstant;
 /* jshint ignore:end */
 
 exports = Class(GC.Application, function () {
+  var folders = {
+    core: [
+      "resources/images/default"
+    ]
+  };
+
   this.initUI = function () {
     var size = this.scaleUI();
 
@@ -180,7 +187,7 @@ exports = Class(GC.Application, function () {
           }
         });
 
-    newGame('classic');
+    loader.preload(folders['core'], bind(this, newGame, 'classic'));
   };
 
   this.launchUI = function () {
