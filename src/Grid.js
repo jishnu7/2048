@@ -11,18 +11,22 @@ import util.underscore as _;
 
 import src.Cell as Cell;
 import src.Utils as Utils;
-import src.PlayGame as PlayGame;
 import src.Storage as Storage;
+import src.ShortcutPromptHandler as ShortcutPromptHandler;
+import src.Modules.facebook_event as facebook_event;
 /* jshint ignore:end */
 
 exports = Class(GridView, function(supr) {
-  var StartCells = 2;
+  var StartCells = 2,
+    swipe_count;
 
   this.init = function(opts) {
     var size = 4,
       margin = 10,
       baseSize = opts.baseWidth - 100,
       cellSize = Math.round((baseSize-margin*2)/size) - margin*2;
+
+    ShortcutPromptHandler.min_cond = 256;
 
     this._refresh = [];
 
@@ -94,6 +98,7 @@ exports = Class(GridView, function(supr) {
     });
 
     this.score = opts.score;
+    swipe_count = 0;
   };
 
   // Function to load saved game from local storage.
@@ -144,12 +149,6 @@ exports = Class(GridView, function(supr) {
     // Stats and leaderboard
     Storage.saveGameStats(this);
     score.saveHighScore();
-    if(this.mode === 'time') {
-      PlayGame.leaderboard('time', score.score*1000);
-    } else {
-      PlayGame.leaderboard('score', score.score);
-      PlayGame.leaderboard('tile', score.highestTile);
-    }
   };
 
   // First function to call from menu screen
@@ -260,11 +259,12 @@ exports = Class(GridView, function(supr) {
     var newVal = cell1.getValue() + cell2.getValue();
     cell1.setValue(newVal);
     cell2.setValue(newVal);
-    PlayGame.achievement(newVal);
     Storage.saveTileStats(newVal);
     this.removeCell(cell2);
     this.score.update(newVal);
     this.emit('updateScore', newVal);
+
+    ShortcutPromptHandler.min_cond == newVal && ShortcutPromptHandler.prompt();
   };
 
   this.moveCells = function(direction, cb) {
@@ -306,6 +306,11 @@ exports = Class(GridView, function(supr) {
         }
       }));
     }));
+
+    if (moveMade && GC.app.first_launch && swipe_count < 5) {
+      swipe_count = swipe_count + 1;
+      facebook_event.logEvent('swipe_' + swipe_count);
+    }
   };
 
   this.moveCell = function(cell, farthest, cb) {

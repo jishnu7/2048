@@ -1,0 +1,14 @@
+{
+  "instant_games": {
+    "custom_update_templates": {
+      "first_place": {
+        "example": "Player X just became the first place in game Y!"
+      }
+    },
+    "orientation": "PORTRAIT",
+    "navigation_menu_version": "NAV_FLOATING",
+    "bot": {
+      "subscription_type": "OPT_IN_PUBLIC"
+    }
+  }
+}

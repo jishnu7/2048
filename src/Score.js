@@ -4,9 +4,9 @@ import ui.View as View;
 import ui.TextView as TextView;
 import ui.ScoreView as ScoreView;
 import util.underscore as _;
+import fbinstant as fbinstant;
 
 import src.Utils as Utils;
-import src.PlayGame as PlayGame;
 /* jshint ignore:end */
 
 exports = Class(View, function(supr) {
@@ -55,8 +55,7 @@ exports = Class(View, function(supr) {
         height: 30,
         text: name,
         size: 30 * scale,
-        color: Utils.theme.text,
-        fontFamily: Utils.fonts.text
+        color: Utils.theme.text
       }),
       number = new ScoreView({
         superview: container,
@@ -76,7 +75,6 @@ exports = Class(View, function(supr) {
         var out = '',
           h, m;
         if(mode === 'time') {
-          PlayGame.achievement(value, mode);
           h = Math.floor(value/3600);
           if(h > 0) {
             out += h + ':';
@@ -132,6 +130,7 @@ exports = Class(View, function(supr) {
 
   this.setScore = function(score) {
     this.score = score;
+    GC.app.updateLeaderBoard();
     this.scoreView.setText(this.mode, score);
     if(score > this.highScore) {
       this.setHighScore(score);
@@ -142,6 +141,9 @@ exports = Class(View, function(supr) {
     score = score || getHighScore(this.mode);
     this.highScore = score;
     this.highScoreView.setText(this.mode, score);
+    fbinstant.setDataAsync({
+      high_score: this.highScore
+    });
   };
 
   this.saveHighScore = function() {

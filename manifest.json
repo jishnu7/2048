@@ -11,9 +11,14 @@
     }
   },
   "appID": "2a2a13abfe6a469189951d0031514f4b",
+  "browser": {
+    "canvas": {
+      "useWebGL": true
+    }
+  },
   "dependencies": {
-    "devkit-core": "https://github.com/hashcube/devkit-core#v4.5.3-1",
-    "gameplay": "https://github.com/hashcube/gameplay.git#v3.2.3"
+    "devkit-core": "https://github.com/hashcube/devkit-core.git#hc-fbinstant",
+    "fbinstant": "git@github.com:hashcube/fbinstant.git#master"
   },
   "description": "",
   "icon": "resources/icons/icon512.png",
@@ -40,5 +45,5 @@
     "resources/fonts/Raleway-ExtraLight.ttf",
     "resources/fonts/Signika-Regular.ttf"
   ],
-  "version": "2.0"
+  "version": "0.0.2"
 }

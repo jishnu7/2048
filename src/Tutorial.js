@@ -4,7 +4,6 @@ import ui.TextView as TextView;
 
 import src.Storage as Storage;
 import src.Utils as Utils;
-import src.PlayGame as PlayGame;
 /* jshint ignore:end */
 
 exports = Class(TextView, function(supr) {
@@ -12,8 +11,7 @@ exports = Class(TextView, function(supr) {
     strings = [
       'Swipe to merge cells.',
       'There is a catch, only cells with the same number will merge.',
-      'Score your highest by attaining a tile with 2048 or more.',
-      'Sign-in with your Google account to compare scores with your friends.'
+      'Score your highest by attaining a tile with 2048 or more.'
     ],
     busy = false;
 
@@ -27,8 +25,7 @@ exports = Class(TextView, function(supr) {
       wrap: true,
       padding: '100 100',
       offsetY: 75,
-      color: Utils.theme.text,
-      fontFamily: Utils.fonts.number
+      color: Utils.theme.text
     });
     supr(this, 'init', [opts]);
   };
@@ -58,15 +55,6 @@ exports = Class(TextView, function(supr) {
   };
 
   this.show = function() {
-    if(head >= strings.length ||
-        // if user is connected to google, don't show G+ message
-        (head === strings.length - 1 && PlayGame.isLoggedIn())) {
-      this.updateOpts({
-        visible: false
-      });
-      return;
-    }
-
     var anim = animate(this);
     anim.now(function() {
       this.updateOpts({

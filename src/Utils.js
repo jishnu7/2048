@@ -19,18 +19,6 @@ exports = (function() {
   obj.setTheme = function(theme) {
     theme = theme || Storage.getTheme();
     obj.theme = JSON.parse(CACHE['resources/themes/' + theme + '.json']);
-    obj.theme.number = {
-      '0': { 'image': 'resources/images/' + theme + '/number_0.png' },
-      '1': { 'image': 'resources/images/' + theme + '/number_1.png' },
-      '2': { 'image': 'resources/images/' + theme + '/number_2.png' },
-      '3': { 'image': 'resources/images/' + theme + '/number_3.png' },
-      '4': { 'image': 'resources/images/' + theme + '/number_4.png' },
-      '5': { 'image': 'resources/images/' + theme + '/number_5.png' },
-      '6': { 'image': 'resources/images/' + theme + '/number_6.png' },
-      '7': { 'image': 'resources/images/' + theme + '/number_7.png' },
-      '8': { 'image': 'resources/images/' + theme + '/number_8.png' },
-      '9': { 'image': 'resources/images/' + theme + '/number_9.png' },
-    };
     obj.theme.score = {
       '0': { 'image': 'resources/images/' + theme + '/score_0.png' },
       '1': { 'image': 'resources/images/' + theme + '/score_1.png' },
@@ -62,42 +50,6 @@ exports = (function() {
   obj.fonts = {
     number: 'Signika-Light',
     text: 'Raleway-ExtraLight'
-  };
-
-  obj.humanTime = function(seconds) {
-    var out = '', h, m;
-    h = Math.floor(seconds/3600);
-    if(h>0) {
-      out += h + 'h ';
-    }
-    seconds %= 3600;
-    m = Math.floor(seconds/60);
-    out += m + 'm ';
-    seconds %= 60;
-    out += Math.floor(seconds) + 's' ;
-    return out;
-  };
-
-  obj.getButtonImage = function(name, theme, select) {
-    var path = '',
-      images;
-
-    if(theme) {
-      path = Storage.getTheme() + '/';
-    }
-
-    if(select) {
-      images = {
-        selected: new Image({url: 'resources/images/' + path + 'btn_' + name + 'on.png'}),
-        unselected: new Image({url: 'resources/images/btn_' + name + 'off.png'})
-      };
-    } else {
-      images = {
-        up: new Image({url: 'resources/images/' + path + 'btn_' + name + '.png'}),
-        down: new Image({url: 'resources/images/btn_' + name + '_down.png'})
-      };
-    }
-    return images;
   };
 
   obj.getImage = function(name, theme) {

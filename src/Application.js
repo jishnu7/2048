@@ -5,24 +5,44 @@ import ui.GestureView as GestureView;
 import AudioManager;
 import event.Callback as Callback;
 import util.underscore as _;
+import ui.resource.loader as loader;
 
 import src.Utils as Utils;
 import src.History as History;
 import src.Storage as Storage;
-import src.PlayGame as PlayGame;
 
 import src.Grid as Grid;
 import src.Score as Score;
 import src.Menu as Menu;
-import src.Stats as Stats;
-import src.Settings as Settings;
 import src.Tutorial as Tutorial;
-import src.About as About;
+import src.Modules.facebook_event as facebook_event;
+import fbinstant as fbinstant;
 /* jshint ignore:end */
 
 exports = Class(GC.Application, function () {
+  var folders = {
+    core: [
+      "resources/images/default"
+    ]
+  };
+
   this.initUI = function () {
     var size = this.scaleUI();
+
+    fbinstant.getDataAsync(['bot_subscribed'])
+      .then(function (data) {
+        return data['bot_subscribed'] ? Promise.reject() :
+          fbinstant.canSubscribeBotAsync();
+      })
+      .then(function (can_subscribe) {
+        return can_subscribe ? fbinstant.subscribeBotAsync() :
+          Promise.reject();
+      })
+      .then(function () {
+        return fbinstant.setDataAsync({
+          bot_subscribed: true
+        })
+      });
 
     this.view.updateOpts({
       width: size.width,
@@ -82,6 +102,21 @@ exports = Class(GC.Application, function () {
       tutorial.start();
     };
 
+    this.updateLeaderBoard = function () {
+      var context = fbinstant.FBInstant.context.getID();
+
+      fbinstant.getLeaderboardAsync("leaderboard_context." + context)
+        .then(function (leaderboard) {
+          return leaderboard.setScoreAsync(score.score);
+        })
+        .then(function () {
+          return FBInstant.updateAsync({
+            action: 'LEADERBOARD',
+            name: 'leaderboard_context.' + context
+          });
+        });
+    };
+
     grid.on('updateScore', function() {
       audio.play('merge');
     });
@@ -118,73 +153,41 @@ exports = Class(GC.Application, function () {
       width: size.width,
       height: size.height
     });
-    this._refresh.push(menu);
-
-    var pause = this.onPause = bind(this.view, function() {
-      if(this.hasView(game)) {
-        grid.backButton();
-        this.pop();
-        menu.update();
-      }
-    });
 
     menu.on('continue', bind(this.view, function() {
       gameInit();
-      History.add(pause, game);
       this.push(game);
     }));
 
-    var newGame = function(mode) {
+    game.on('ViewDidAppear', bind(this, function () {
+      facebook_event.screenLoaded({
+        screen: 'game_screen'
+      });
+    }));
+
+    var newGame = bind(this, function(mode) {
       grid.setMode(mode);
       Storage.deleteGame();
       tutorial.reset();
       menu.emit('continue');
       var evnt = {};
       evnt[mode] = true;
-    };
-    menu.on('new', bind(this, newGame, 'classic'));
-    menu.on('time', bind(this, newGame, 'time'));
-
-    var stats, settings, about;
-    menu.on('stats', bind(this, function() {
-      if(!stats) {
-        stats = new Stats({
-          width: size.width,
-          height: size.height
-        });
-        this._refresh.push(stats);
-      }
-      stats.update();
-      this.push(stats);
-      History.add(bind(this, this.pop), stats);
-    }));
-
-    var aboutScreen = bind(this, function() {
-      if(!about) {
-        about = new About({
-          width: size.width,
-          height: size.height
-        });
-        this._refresh.push(about);
-      }
-      this.push(about);
-      History.add(bind(this, this.pop), about);
     });
 
-    menu.on('settings', bind(this, function() {
-      if(!settings) {
-        settings = new Settings({
-          audio: audio
+    fbinstant.getDataAsync(['played_before'])
+        .then(function (data) {
+          if (!data['played_before']) {
+            facebook_event.firstLaunch({
+              app_version: CONFIG.version
+            });
+            fbinstant.setDataAsync({
+              played_before: true
+            });
+            GC.app.first_launch = true;
+          }
         });
-        settings.on('about', aboutScreen);
-        this._refresh.push(settings);
-      }
-      settings.update();
-      this.push(settings);
-      History.add(bind(this, this.pop), settings);
-    }));
 
-    this.push(menu);
+    loader.preload(folders['core'], bind(this, newGame, 'classic'));
   };
 
   this.launchUI = function () {
@@ -219,6 +222,4 @@ exports = Class(GC.Application, function () {
       view.refresh && view.refresh();
     });
   };
-
-  this.onResume = PlayGame.login;
 });
