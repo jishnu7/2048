@@ -2,6 +2,8 @@
 import device;
 import ui.TextView as TextView;
 import ui.GestureView as GestureView;
+import ui.widget.ButtonView as ButtonView;
+
 import AudioManager;
 import event.Callback as Callback;
 import util.underscore as _;
@@ -13,6 +15,7 @@ import src.Storage as Storage;
 
 import src.Grid as Grid;
 import src.Score as Score;
+import src.MenuPopup as MenuPopup;
 import src.Menu as Menu;
 import src.Tutorial as Tutorial;
 import src.Modules.facebook_event as facebook_event;
@@ -27,7 +30,8 @@ exports = Class(GC.Application, function () {
   };
 
   this.initUI = function () {
-    var size = this.scaleUI();
+    var size = this.scaleUI(),
+    menu_icon = Utils.getImage('menu/menu-icon', true);
 
     fbinstant.getDataAsync(['bot_subscribed'])
       .then(function (data) {
@@ -96,6 +100,42 @@ exports = Class(GC.Application, function () {
       width: size.width
     });
     this._refresh.push(tutorial);
+
+    var menu_pops = new MenuPopup();
+
+
+    var menu_button = new ButtonView({
+      superview: game,
+      layout: "box",
+      width: 100,
+      height: 100,
+      images: {
+        up: menu_icon
+      },
+      on: {
+        up: function (){
+          menu_pops.on('menu-closed', function (event, point) {
+            menu_button.show();
+            menu_pops.removeAllListeners('menu-closed')
+          });
+          menu_pops.build(game);
+        }
+      }
+    });
+
+   menu_button.on('up', function (event, point) {
+         menu_button.hide();
+    });
+
+
+
+    menu_button.updateOpts({
+      bottom: 10,
+      right: 10,
+      inLayout: false
+    })
+
+     //menu_pops.build(this);
 
     var gameInit = function() {
       grid.initCells(bind(game, game.setHandleEvents, true));
